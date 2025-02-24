@@ -18,12 +18,14 @@ mongoose
   .then((data) => {
     console.log(data);
     console.log("Connected to MongoDB");
-    app.use("/userDreamsDB", route); // Ensure routes are applied after middleware
   })
   .catch((err) => console.error("MongoDB connection error:", err));
 
+app.use("/userDreamsDB", route); // Ensure routes are applied after middleware
 app.get("/", (req, res) => {
-  res.status(200).json({ msg: "connected successfully",data:process.env.MONGODB_URL});
+  res
+    .status(200)
+    .json({ msg: "connected successfully", data: process.env.MONGODB_URL });
   res.send("<h1>hello</h1>");
 });
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
