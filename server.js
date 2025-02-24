@@ -19,6 +19,9 @@ mongoose
     console.log(data);
     console.log("Connected to MongoDB");
     app.use("/userDreamsDB", route); // Ensure routes are applied after middleware
+    app.get('/',(req,res)=>{
+      res.status(200).json({msg:'connected successfully'})
+    })
   })
   .catch((err) => console.error("MongoDB connection error:", err));
 
