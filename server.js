@@ -28,5 +28,5 @@ app.get("/", (req, res) => {
     .json({ msg: "connected successfully", data: process.env.MONGODB_URL });
   res.send("<h1>hello</h1>");
 });
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-export default app;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// export default app;
