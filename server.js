@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 dotenv.config();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(cors());
 // ✅ Ensure JSON and URL-encoded body parsing is enabled BEFORE routes
