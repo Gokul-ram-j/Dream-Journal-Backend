@@ -7,7 +7,7 @@ export const createUser = async (req, res) => {
     const newUser = new User(req.query);
     const savedUser = await newUser
       .save()
-      .then(() => {
+      .then((savedUser) => {
         return res.status(200).json(savedUser);
       })
       .catch((err) => console.log(err));
@@ -16,7 +16,7 @@ export const createUser = async (req, res) => {
   }
 };
 
-// endPoint->           /userdreamsDB/getUserDreams?userEmail=<value>&userName=<value>
+// endPoint->           /userdreamsDB/getUserDreams?userEmail=<value>
 export const getUserDreams = async (req, res) => {
   try {
     console.log(req.query); // Debugging
