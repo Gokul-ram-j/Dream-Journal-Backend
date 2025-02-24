@@ -19,12 +19,12 @@ mongoose
     console.log(data);
     console.log("Connected to MongoDB");
     app.use("/userDreamsDB", route); // Ensure routes are applied after middleware
-    app.get('/',(req,res)=>{
-      res.status(200).json({msg:'connected successfully'})
-      res.send('<h1>hello</h1>')
-    })
   })
   .catch((err) => console.error("MongoDB connection error:", err));
 
+app.get("/", (req, res) => {
+  res.status(200).json({ msg: "connected successfully" });
+  res.send("<h1>hello</h1>");
+});
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 export default app;
