@@ -52,7 +52,6 @@ export const addUserDream = async (req, res) => {
 
     // Decode and parse dreamData correctly
     const parsedDreamData = JSON.parse(decodeURIComponent(dreamData));
-    console.log(parsedDreamData);
     const updatedUser = await User.findOneAndUpdate(
       { userEmail },
       { $push: { dreams: parsedDreamData } },
