@@ -13,7 +13,6 @@ export const createUser = async (req, res) => {
   }
 };
 
-
 export const fetchUserDetails = async (req, res) => {
   console.log(req.query);
   const user = await User.findOne({ userEmail: req.query.userEmail });
@@ -80,6 +79,49 @@ export const addUserDream = async (req, res) => {
     });
   }
 };
+
+// editing user Details
+
+export const editUserDetail = async (req, res) => {
+  try {
+    const { age, phoneNumber, address, objId, email } = req.body;
+    console.log(req.body);
+    const detail = User.find({
+      userEmail: email,
+      "userDetail._id": objId,
+    }).then((res) => {
+      console.log(res);
+    });
+    const updateResponse = await User.updateOne(
+      { userEmail: email },
+      {
+        $set: {
+          "userDetail.age": age,
+          "userDetail.phoneNumber": phoneNumber,
+          "userDetail.address": address,
+        },
+      }
+    );
+
+    console.log("Update Response:", updateResponse);
+
+    if (updateResponse.matchedCount === 0) {
+      console.log("not match");
+      return res.status(404).json({ error: "Dream not found" });
+    }
+    if (updateResponse.modifiedCount === 0) {
+      return res.status(400).json({ error: "Dream found but no changes made" });
+    }
+
+    return res
+      .status(200)
+      .json({ msg: "Successfully updated", data: updateResponse });
+  } catch (error) {
+    console.error("Error updating dream:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 // editing userDream
 
 export const editUserDream = async (req, res) => {
