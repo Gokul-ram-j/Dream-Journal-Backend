@@ -2,17 +2,26 @@ import User from "./modal.js";
 
 // endPoint->           /userdreamsDB/addUser?userEmail=<value>&userName=<value>
 export const createUser = async (req, res) => {
-  console.log("from create user", req.query);
+  console.log("from create user", req.body);
   try {
-    const newUser = new User(req.query);
-    const savedUser = await newUser
-      .save()
-      .then((savedUser) => {
-        return res.status(200).json(savedUser);
-      })
-      .catch((err) => console.log(err));
+    const newUser = new User(req.body);
+    const savedUser = await newUser.save();
+    return res.status(200).json(savedUser);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+export const fetchUserDetails = async (req, res) => {
+  console.log(req.query);
+  const user = await User.findOne({ userEmail: req.query.userEmail });
+  console.log(user);
+  if (user) {
+    res.status(200).json({ userData: user });
+  } else {
+    res.status(505).json({ error: "cannot find user" });
   }
 };
 
@@ -95,26 +104,27 @@ export const editUserDream = async (req, res) => {
     console.log("Update Response:", updateResponse);
 
     if (updateResponse.matchedCount === 0) {
-      console.log('not match')
+      console.log("not match");
       return res.status(404).json({ error: "Dream not found" });
     }
     if (updateResponse.modifiedCount === 0) {
       return res.status(400).json({ error: "Dream found but no changes made" });
     }
 
-    return res.status(200).json({ msg: "Successfully updated", data: updateResponse });
+    return res
+      .status(200)
+      .json({ msg: "Successfully updated", data: updateResponse });
   } catch (error) {
     console.error("Error updating dream:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-
 // getting all user dreams
 
-export const getAllUserDreams= async(req, res) => {
+export const getAllUserDreams = async (req, res) => {
   try {
-    console.log('called')
+    console.log("called");
     // Retrieve only the `dreams` field from all documents
     const users = await User.find({}, "dreams");
     // Extract dreams from all users and flatten the array
@@ -122,10 +132,11 @@ export const getAllUserDreams= async(req, res) => {
     return res.json({ success: true, dreams: allDreams });
   } catch (error) {
     console.error("Error fetching dreams:", error);
-    return res.status(500).json({ success: false, message: "Internal Server Error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
   }
 };
-
 
 // deleting user details
 
@@ -135,13 +146,15 @@ export const deleteUserDream = async (req, res) => {
 
     const updateResponse = await User.updateOne(
       { userEmail },
-      { $pull: { dreams: { _id: dreamId } } } 
+      { $pull: { dreams: { _id: dreamId } } }
     );
 
     console.log("Delete Response:", updateResponse);
 
     if (updateResponse.modifiedCount === 0) {
-      return res.status(404).json({ error: "Dream not found or already deleted" });
+      return res
+        .status(404)
+        .json({ error: "Dream not found or already deleted" });
     }
 
     return res.status(200).json({ msg: "Dream successfully deleted" });
