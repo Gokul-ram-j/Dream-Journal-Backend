@@ -84,11 +84,9 @@ export const addUserDream = async (req, res) => {
 
 export const editUserDetail = async (req, res) => {
   try {
-    const { age, phoneNumber, address, objId, email } = req.body;
-    console.log(req.body);
+    const { age, phoneNumber, address, email,userName } = req.body;
     const detail = User.find({
       userEmail: email,
-      "userDetail._id": objId,
     }).then((res) => {
       console.log(res);
     });
@@ -96,6 +94,7 @@ export const editUserDetail = async (req, res) => {
       { userEmail: email },
       {
         $set: {
+          "userName":userName,
           "userDetail.age": age,
           "userDetail.phoneNumber": phoneNumber,
           "userDetail.address": address,
