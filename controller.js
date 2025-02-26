@@ -19,7 +19,7 @@ export const fetchUserDetails = async (req, res) => {
   const user = await User.findOne({ userEmail: req.query.userEmail });
   console.log(user);
   if (user) {
-    res.status(200).json({ userData: user });
+    res.status(200).json(user);
   } else {
     res.status(505).json({ error: "cannot find user" });
   }
