@@ -126,7 +126,7 @@ export const editUserDetail = async (req, res) => {
 export const editUserDream = async (req, res) => {
   try {
     const { email, dreamDataId, updatedData } = req.body;
-    const { title, category, description } = updatedData;
+    const { title, category, description,analysis } = updatedData;
 
     console.log("Updated Data:", updatedData);
     console.log("Dream ID:", dreamDataId);
@@ -138,6 +138,7 @@ export const editUserDream = async (req, res) => {
           "dreams.$.dreamTitle": title,
           "dreams.$.dreamDesc": description,
           "dreams.$.dreamEmotion": category,
+          "dreams.$.dreamAnalysis": analysis,
         },
       }
     );
