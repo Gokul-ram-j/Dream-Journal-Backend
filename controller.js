@@ -205,3 +205,33 @@ export const deleteUserDream = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// getting analysis
+
+export const dreamAnalysis=async (req,res)=> {
+  const { dreamDesc } = req.body;
+
+  try {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`, // Secure API key
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-3.5-turbo-0613",
+        messages: [{ role: "user", content: `Give a dream analysis for: ${dreamDesc}` }],
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json({ analysis: data.choices[0].message.content });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Failed to fetch dream analysis." });
+  }
+};
